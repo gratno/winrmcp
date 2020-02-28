@@ -1,0 +1,54 @@
+# github.com/Azure/go-ntlmssp v0.0.0-20191115210519-2b2be6cc8ed4
+github.com/Azure/go-ntlmssp
+# github.com/ChrisTrenkamp/goxpath v0.0.0-20190607011252-c5096ec8773d
+github.com/ChrisTrenkamp/goxpath
+github.com/ChrisTrenkamp/goxpath/internal/execxp
+github.com/ChrisTrenkamp/goxpath/internal/execxp/findutil
+github.com/ChrisTrenkamp/goxpath/internal/execxp/intfns
+github.com/ChrisTrenkamp/goxpath/internal/xsort
+github.com/ChrisTrenkamp/goxpath/lexer
+github.com/ChrisTrenkamp/goxpath/parser
+github.com/ChrisTrenkamp/goxpath/parser/pathexpr
+github.com/ChrisTrenkamp/goxpath/tree
+github.com/ChrisTrenkamp/goxpath/tree/xmltree
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlbuilder
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlele
+github.com/ChrisTrenkamp/goxpath/tree/xmltree/xmlnode
+github.com/ChrisTrenkamp/goxpath/xconst
+# github.com/dylanmei/iso8601 v0.1.0
+github.com/dylanmei/iso8601
+# github.com/gofrs/uuid v3.2.0+incompatible
+github.com/gofrs/uuid
+# github.com/masterzen/simplexml v0.0.0-20190410153822-31eea3082786
+github.com/masterzen/simplexml/dom
+# github.com/masterzen/winrm v0.0.0-20190308153735-1d17eaf15943
+github.com/masterzen/winrm
+github.com/masterzen/winrm/soap
+# github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+github.com/nu7hatch/gouuid
+# golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d
+golang.org/x/crypto/md4
+# golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/html/charset
+# golang.org/x/text v0.3.2
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/htmlindex
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/japanese
+golang.org/x/text/encoding/korean
+golang.org/x/text/encoding/simplifiedchinese
+golang.org/x/text/encoding/traditionalchinese
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/tag
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/language
+golang.org/x/text/runes
+golang.org/x/text/transform
+# gopkg.in/yaml.v2 v2.2.8
+gopkg.in/yaml.v2
