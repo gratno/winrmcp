@@ -93,6 +93,25 @@ func (fs *Winrmcp) List(remotePath string) ([]FileItem, error) {
 	return fetchList(fs.client, winPath(remotePath))
 }
 
+func (fs *Winrmcp) Client() *winrm.Client {
+	return fs.client
+}
+
+func (fs *Winrmcp) Command(command string, arguments ...string) error {
+	shell, err := fs.client.CreateShell()
+	if err != nil {
+		return err
+	}
+	defer shell.Close()
+	cmd, err := shell.Execute(command, arguments...)
+	if err != nil {
+		return err
+	}
+	io.Copy(os.Stdout, cmd.Stdout)
+	io.Copy(os.Stdout, cmd.Stderr)
+	return nil
+}
+
 type fileWalker struct {
 	client  *winrm.Client
 	config  *Config
