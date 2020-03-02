@@ -2,9 +2,11 @@ package winrmcp
 
 import (
 	"fmt"
+	"github.com/gratno/winrmcp/config"
 	"io"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/dylanmei/iso8601"
@@ -60,6 +62,23 @@ func New(addr string, config *Config) (*Winrmcp, error) {
 	return &Winrmcp{client, config}, err
 }
 
+// 解决拷贝大文件太慢
+func (fs *Winrmcp) RoboCopy(server config.Server) error {
+	cp := robocopy{
+		client: fs.client,
+		server: server,
+	}
+	err := cp.ensure()
+	if err != nil {
+		return fmt.Errorf("cp.ensure failed! err:%w", err)
+	}
+	err = cp.copy()
+	if err != nil {
+		return fmt.Errorf("cp.copy failed! err:%w", err)
+	}
+	return nil
+}
+
 func (fs *Winrmcp) Copy(fromPath, toPath string) error {
 	f, err := os.Open(fromPath)
 	if err != nil {
@@ -107,8 +126,19 @@ func (fs *Winrmcp) Command(command string, arguments ...string) error {
 	if err != nil {
 		return err
 	}
-	io.Copy(os.Stdout, cmd.Stdout)
-	io.Copy(os.Stdout, cmd.Stderr)
+	defer cmd.Close()
+	var wg sync.WaitGroup
+	copyFunc := func(w io.Writer, r io.Reader) {
+		defer wg.Done()
+		io.Copy(w, r)
+	}
+
+	wg.Add(2)
+	go copyFunc(os.Stdout, cmd.Stdout)
+	go copyFunc(os.Stderr, cmd.Stderr)
+
+	cmd.Wait()
+	wg.Wait()
 	return nil
 }
 

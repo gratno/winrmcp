@@ -12,16 +12,16 @@ var (
 )
 
 type Setting struct {
-	User           string   `json:"user" yaml:"user"`
-	Pass           string   `json:"pass" yaml:"pass"`
-	Https          bool     `json:"https" yaml:"https"`
-	Insecure       bool     `json:"insecure" yaml:"insecure"`
-	OpTimeout      string   `json:"op_timeout" yaml:"op_timeout"`
-	MaxOpsPerShell int      `json:"max_ops_per_shell" yaml:"max_ops_per_shell"`
-	Before         []string `json:"before" yaml:"before"`
-	After          []string `json:"after" yaml:"after"`
-	Tasks          []Copy   `json:"tasks" yaml:"tasks"`
-	Servers        []Server `json:"servers" yaml:"servers"`
+	User           string            `json:"user" yaml:"user"`
+	Pass           string            `json:"pass" yaml:"pass"`
+	Https          bool              `json:"https" yaml:"https"`
+	Insecure       bool              `json:"insecure" yaml:"insecure"`
+	OpTimeout      string            `json:"op_timeout" yaml:"op_timeout"`
+	MaxOpsPerShell int               `json:"max_ops_per_shell" yaml:"max_ops_per_shell"`
+	Before         []string          `json:"before" yaml:"before"`
+	After          []string          `json:"after" yaml:"after"`
+	Tasks          []Copy            `json:"tasks" yaml:"tasks"`
+	Servers        map[string]Server `json:"servers" yaml:"servers"`
 }
 
 type Copy struct {
@@ -58,8 +58,7 @@ func Parse() {
 		panic(err)
 	}
 
-	for i := range Conf.Servers {
-		server := &Conf.Servers[i]
+	for name, server := range Conf.Servers {
 		if server.User == "" {
 			server.User = Conf.User
 		}
@@ -93,6 +92,7 @@ func Parse() {
 		if server.After == nil {
 			server.After = Conf.After
 		}
+		Conf.Servers[name] = server
 	}
 	log.Printf("Config is %+v\n", Conf)
 }

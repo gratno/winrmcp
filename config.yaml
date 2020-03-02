@@ -8,4 +8,5 @@ tasks:
     dst: ""
 after: []
 servers:
-  - addr: 192.168.1.1
+  server01:
+    addr: 192.168.1.1

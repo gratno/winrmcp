@@ -11,7 +11,7 @@ import (
 	"github.com/gratno/winrmcp/winrmcp"
 )
 
-func app(thread int, server config.Server) error {
+func app(name string, server config.Server) error {
 	opTimeout, err := time.ParseDuration(server.OpTimeout)
 	if err != nil {
 		return fmt.Errorf("time.ParseDuration failed! err:%w", err)
@@ -31,21 +31,19 @@ func app(thread int, server config.Server) error {
 		return fmt.Errorf("winrmcp.New failed! err:%w", err)
 	}
 
-	log.Printf("[%d] exec before command... \n", thread)
+	log.Printf("[%s] exec before command... \n", name)
 	for _, v := range server.Before {
 		err := client.Command(v)
 		if err != nil {
 			return fmt.Errorf("client.Command failed! command:%s err:%w", v, err)
 		}
 	}
-	log.Printf("[%d] exec copy task...\n", thread)
-	for _, v := range server.Tasks {
-		err := client.Copy(v.Src, v.Dst)
-		if err != nil {
-			return fmt.Errorf("client.Copy failed! err:%w", err)
-		}
+	log.Printf("[%s] exec copy task...\n", name)
+	err = client.RoboCopy(server)
+	if err != nil {
+		return fmt.Errorf("client.RoboCopy failed! err:%w", err)
 	}
-	log.Printf("[%d] exec after command...", thread)
+	log.Printf("[%s] exec after command...", name)
 	for _, v := range server.After {
 		err := client.Command(v)
 		if err != nil {
@@ -59,16 +57,16 @@ func main() {
 	log.SetFlags(log.LstdFlags)
 	config.Parse()
 	wg := sync.WaitGroup{}
-	for i, server := range config.Conf.Servers {
+	for name, server := range config.Conf.Servers {
 		wg.Add(1)
-		go func(i int) {
-			log.Printf("[+]server-%d start task...\n", i)
+		go func(name string) {
+			log.Printf("[+]%s start task...\n", name)
 			defer wg.Done()
-			if err := app(i, server); err != nil {
-				log.Printf("[-]server-%d run app failed! err: %s\n", i, err)
+			if err := app(name, server); err != nil {
+				log.Printf("[-]%s run app failed! err: %s\n", name, err)
 			}
-			log.Printf("[+]server-%d finish task...\n", i)
-		}(i)
+			log.Printf("[+]%s finish task...\n", name)
+		}(name)
 	}
 	wg.Wait()
 	log.Println("[+] game over!")
