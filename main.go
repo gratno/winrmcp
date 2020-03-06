@@ -12,6 +12,7 @@ import (
 )
 
 func app(name string, server config.Server) error {
+	log.Printf("[%s] server:%s start app...\n", name, server.Addr)
 	opTimeout, err := time.ParseDuration(server.OpTimeout)
 	if err != nil {
 		return fmt.Errorf("time.ParseDuration failed! err:%w", err)
@@ -59,14 +60,14 @@ func main() {
 	wg := sync.WaitGroup{}
 	for name, server := range config.Conf.Servers {
 		wg.Add(1)
-		go func(name string) {
+		go func(name string, server config.Server) {
 			log.Printf("[+]%s start task...\n", name)
 			defer wg.Done()
 			if err := app(name, server); err != nil {
 				log.Printf("[-]%s run app failed! err: %s\n", name, err)
 			}
 			log.Printf("[+]%s finish task...\n", name)
-		}(name)
+		}(name, server)
 	}
 	wg.Wait()
 	log.Println("[+] game over!")
